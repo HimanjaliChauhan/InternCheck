@@ -1,0 +1,117 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Companies</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { margin-bottom: 20px; }
+        table { border-collapse: collapse; width: 45%; margin: 10px; float: left; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #333; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        form { margin-bottom: 20px; }
+        input, select, button { padding: 5px; margin: 5px; }
+        .flash { padding: 10px; background-color: #d4edda; color: #155724;
+                 border: 1px solid #c3e6cb; margin-bottom: 20px; width: 400px; }
+        a { display: inline-block; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<p>👤 Logged in as: {{ session.username }} | <a href="/logout">🚪 Logout</a></p>
+
+    <h1>Manage Whitelist / Blacklist</h1>
+
+    <!-- Flash messages 
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Add Company Form 
+    <form method="POST" action="/manage">
+        <input type="text" name="company_name" placeholder="Company Name" required>
+        <select name="list_type" required>
+            <option value="">Select List</option>
+            <option value="whitelist">Whitelist</option>
+            <option value="blacklist">Blacklist</option>
+        </select>
+        <button type="submit">Add</button>
+    </form>
+
+    <!-- Display Whitelist 
+    <h2>Whitelisted Companies</h2>
+    <table>
+        <tr><th>ID</th><th>Company Name</th><th>Action</th></tr>
+        {% for company in whitelist %}
+        <tr>
+            <td>{{ company[0] }}</td>
+            <td>{{ company[1] }}</td>
+            <td>
+                <a href="/edit/whitelist/{{ company[0] }}">✏ Edit</a> | 
+                <a href="/delete/whitelist/{{ company[0] }}" 
+                   onclick="return confirm('Are you sure you want to delete this company?');">🗑 Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Display Blacklist 
+    <h2>Blacklisted Companies</h2>
+    <table>
+        <tr><th>ID</th><th>Company Name</th><th>Action</th></tr>
+        {% for company in blacklist %}
+        <tr>
+            <td>{{ company[0] }}</td>
+            <td>{{ company[1] }}</td>
+            <td>
+                <a href="/edit/blacklist/{{ company[0] }}">✏ Edit</a> | 
+                <a href="/delete/blacklist/{{ company[0] }}" 
+                   onclick="return confirm('Are you sure you want to delete this company?');">🗑 Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <div style="clear:both;"></div>
+    <a href="/">⬅ Back to Home</a> | <a href="/reports">📄 View Reports</a>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Manage — InternCheck</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div style="max-width:900px;margin:28px auto;">
+    <h2>Manage</h2>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for m in messages %}
+          <div style="background:#fff3cd;padding:8px;border-radius:6px;margin-bottom:8px;">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <h3>Your Internships</h3>
+    {% if internships %}
+      {% for i in internships %}
+        <div style="border:1px solid #eef2f7;padding:10px;border-radius:6px;margin-bottom:8px;">
+          <div style="font-weight:700">{{ i.title }}</div>
+          <div style="color:#6b7280">{{ i.created_at }}</div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No internships found.</p>
+    {% endif %}
+    <p><a href="{{ url_for('post_internship') }}">Post new internship</a></p>
+  </div>
+</body>
+</html>

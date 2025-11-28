@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Post Internship</title>
+</head>
+<body style="max-width:700px;margin:40px auto;">
+  <h2>Post Internship</h2>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for m in messages %}
+        <div style="background:#fff3cd;padding:8px;border-radius:6px;margin-bottom:8px;">{{ m }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  <form method="POST">
+    <label>Title</label><br>
+    <input type="text" name="title" required style="width:100%;padding:8px;margin-bottom:8px;">
+    <label>Description</label><br>
+    <textarea name="description" rows="8" style="width:100%;padding:8px;margin-bottom:8px;"></textarea>
+    <label>Location</label><br>
+    <input type="text" name="location" style="width:100%;padding:8px;margin-bottom:8px;">
+    <label>Stipend</label><br>
+    <input type="text" name="stipend" style="width:100%;padding:8px;margin-bottom:8px;">
+    <label>Skills required</label><br>
+    <input type="text" name="skills_required" style="width:100%;padding:8px;margin-bottom:8px;">
+    <div style="margin-top:10px;">
+      <button type="submit" style="padding:8px 12px;background:#2563eb;color:white;border:none;border-radius:6px;">Post</button>
+    </div>
+  </form>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Browse — InternCheck</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div style="max-width:900px;margin:28px auto;">
+    <h2>All Internships</h2>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for m in messages %}
+          <div style="background:#fff3cd;padding:8px;border-radius:6px;margin-bottom:8px;">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if internships %}
+      {% for i in internships %}
+        <div style="border:1px solid #eef2f7;padding:12px;border-radius:8px;margin-bottom:10px;">
+          <div style="font-weight:700">{{ i.title }}</div>
+          <div style="color:#6b7280">{{ i.company_name or 'Company' }} — {{ i.location or 'Remote' }}</div>
+          <div style="margin-top:8px;">{{ i.description[:300] }}{% if i.description|length > 300 %}...{% endif %}</div>
+          <div style="margin-top:8px;">
+            <a href="{{ url_for('apply', internship_id=i.id) }}" style="padding:6px 10px;background:#2563eb;color:white;border-radius:6px;text-decoration:none;">Apply</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No internships posted yet.</p>
+    {% endif %}
+    <p><a href="{{ url_for('index') }}">Back home</a></p>
+  </div>
+</body>
+</html>

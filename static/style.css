@@ -1,0 +1,234 @@
+/* static/style.css - paste whole file */
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --accent:#2563eb;
+  --success:#16a34a;
+  --danger:#ef4444;
+  --warn:#f59e0b;
+  --rounded:10px;
+  --maxwidth:980px;
+  --glass: rgba(255,255,255,0.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg,#eef2ff 0%, #f7fafc 100%);
+  color:#111827;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:24px;
+  display:flex;
+  justify-content:center;
+}
+
+.app {
+  width:100%;
+  max-width:var(--maxwidth);
+}
+
+/* header / nav */
+.header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:20px;
+}
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:inherit;
+}
+.logo {
+  width:46px;
+  height:46px;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--accent), #7c3aed);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-weight:700;
+  font-size:18px;
+  box-shadow:0 6px 18px rgba(37,99,235,0.12);
+}
+nav .links {
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+nav .links a {
+  color:var(--muted);
+  text-decoration:none;
+  padding:8px 12px;
+  border-radius:8px;
+}
+nav .links a:hover { background:var(--glass); color:var(--accent)}
+
+/* main container */
+.container {
+  background:var(--card);
+  border-radius:var(--rounded);
+  padding:20px;
+  box-shadow: 0 6px 24px rgba(15,23,42,0.06);
+}
+
+/* layout */
+.grid {
+  display:grid;
+  grid-template-columns: 1fr 380px;
+  gap:20px;
+}
+@media (max-width:1000px){
+  .grid { grid-template-columns: 1fr; }
+}
+
+/* card */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.04);
+}
+
+.h1 {
+  font-size:20px;
+  margin:0 0 8px 0;
+}
+
+/* forms */
+textarea, input[type="text"], select {
+  width:100%;
+  padding:12px 10px;
+  border-radius:8px;
+  border:1px solid #e6edf3;
+  font-size:14px;
+  resize:vertical;
+}
+button.btn {
+  background:var(--accent);
+  border:none;
+  color:white;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+button.btn:active{ transform:translateY(1px) }
+
+/* small secondary */
+small.muted { color:var(--muted); display:block; margin-top:8px }
+
+/* result box */
+.result {
+  margin-top:12px;
+  padding:12px;
+  border-radius:8px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.flag {
+  padding:8px 12px;
+  border-radius:8px;
+  font-weight:700;
+}
+.flag.Red { background:var(--danger); color:white }
+.flag.Yellow { background:var(--warn); color:black }
+.flag.Green { background:var(--success); color:white }
+
+/* trust score bar */
+.score-wrap { width:100%; }
+.score-bar {
+  width:100%;
+  background:#eef2ff;
+  height:12px;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:8px;
+}
+.score-fill {
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent), #10b981);
+  transition:width 700ms ease;
+  border-radius:999px;
+}
+
+/* table styles */
+.table {
+  width:100%;
+  border-collapse:collapse;
+}
+.table th, .table td {
+  padding:10px 8px;
+  border-bottom:1px solid #f1f5f9;
+  text-align:left;
+  font-size:14px;
+}
+.table th { background:#0f172a; color:white; font-size:13px; }
+
+/* flash */
+.flash {
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:12px;
+}
+.flash.success { background:#e6ffed; color:#064e3b; border:1px solid #bbf7d0 }
+.flash.error { background:#fff1f2; color:#7f1d1d; border:1px solid #fecaca }
+
+/* footer note */
+.footer-note { text-align:center; margin-top:18px; color:var(--muted); font-size:13px }
+
+/* --- small visibility & robustness fixes --- */
+
+/* Ensure score-fill is visible even if width set inline */
+.score-fill {
+  height:100%;
+  width:0% !important;              /* default, overridden by inline style from template */
+  background: linear-gradient(90deg, var(--accent), #10b981);
+  transition: width 450ms ease !important;
+  border-radius: 999px;
+  display:block;
+  min-width:8px;                    /* ensures thin bars remain visible on 0-1% values */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+/* Make score-bar clearer on all backgrounds */
+.score-bar {
+  background:#f1f5f9 !important;
+  border-radius:999px;
+  height:12px;
+  overflow:hidden;
+}
+
+/* Flash boxes: ensure they are visible and consistent */
+.flash {
+  padding:12px 14px;
+  border-radius:10px;
+  margin-bottom:14px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.05);
+  font-weight:600;
+  max-width:var(--maxwidth);
+}
+
+/* Explicit success / error colors (match existing variables) */
+.flash.success { background:#ecfdf5; color:#064e3b; border:1px solid #bbf7d0; }
+.flash.error   { background:#fff1f2; color:#7f1d1d; border:1px solid #fecaca; }
+.flash.info    { background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; }
+
+/* If flash area is rendered at top, make sure it is not hidden behind header */
+.flash-container {
+  position:relative;   /* change to fixed if you want it to always be on top */
+  z-index: 40;
+  margin-top:6px;
+}
+
+/* small helper to ensure the percent text is always visible */
+.score-wrap small { color: #374151; font-weight:600; }

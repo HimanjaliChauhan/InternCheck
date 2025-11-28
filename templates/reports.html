@@ -1,0 +1,145 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Reports — InternCheck</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <a class="brand" href="/"><div class="logo">IC</div><div><div style="font-weight:700">InternCheck</div><small class="muted">Reports</small></div></a>
+      <nav><div class="links"><a href="/">Home</a><a href="/manage">Manage</a><a href="/logout">Logout</a></div></nav>
+    </header>
+
+    <main class="container">
+      <div class="card">
+        <h2 style="margin:0 0 12px 0">Student Reports</h2>
+        {% if reports %}
+        <table class="table">
+          <tr><th>ID</th><th>Posting ID</th><th>Feedback</th><th>Reason</th></tr>
+          {% for r in reports %}
+            <tr>
+              <td>{{ r[0] }}</td>
+              <td style="font-family:monospace">{{ r[1] }}</td>
+              <td>{{ r[2] }}</td>
+              <td>{{ r[3] if r[3] else "—" }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+        {% else %}
+          <p class="muted">No reports yet.</p>
+        {% endif %}
+      </div>
+    </main>
+    <div class="footer-note">Reports from students about suspicious internships</div>
+  </div>
+</body>
+</html>
+ -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Reports — InternCheck</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app" style="max-width:1000px;margin:20px auto;padding:0 12px;">
+    <header class="header" style="margin-bottom:18px;">
+      <a class="brand" href="/">
+        <div class="logo">IC</div>
+        <div>
+          <div style="font-weight:700">InternCheck</div>
+          <small class="muted">Reports</small>
+        </div>
+      </a>
+      <nav>
+        <div class="links">
+          <a href="/">Home</a>
+          <a href="/internships">Browse</a>
+          <a href="/recommend">Recommend</a>
+          <a href="/reports">Reports</a>
+          <a href="/manage">Manage</a>
+        </div>
+      </nav>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for m in messages %}
+          <div class="flash success" style="margin-bottom:12px;">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <main style="display:grid;grid-template-columns:1fr 360px;gap:20px;">
+      <section>
+        <div class="card">
+          <h2 style="margin:0 0 12px 0">Submitted Reports</h2>
+
+          {% if reports %}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Posting ID</th>
+                  <th>Feedback</th>
+                  <th>Reason</th>
+                  <th>Reporter</th>
+                  <th>When</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in reports %}
+                <tr>
+                  <td>{{ r.id }}</td>
+                  <td style="max-width:220px;word-break:break-all;">{{ r.posting_id or '-' }}</td>
+                  <td>{{ r.user_feedback or '-' }}</td>
+                  <td style="max-width:300px;word-break:break-word;">{{ r.reason or '-' }}</td>
+                  <td>{{ r.reporter_id or '-' }}</td>
+                  <td>{{ r.created_at or '-' }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p class="muted">No reports submitted yet.</p>
+          {% endif %}
+        </div>
+      </section>
+
+      <aside>
+        <div class="card">
+          <div style="font-weight:700">Top skills (from internships)</div>
+          {% if top_skills %}
+            <ul style="margin-top:8px;color:var(--muted)">
+              {% for s,c in top_skills %}
+                <li>{{ s }} — {{ c }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="muted">No skills data.</p>
+          {% endif %}
+          <hr>
+          <div style="font-weight:700">Top companies</div>
+          {% if top_companies %}
+            <ul style="margin-top:8px;color:var(--muted)">
+              {% for c in top_companies %}
+                <li>{{ c['full_name'] or c['company_username'] or 'Company' }} — {{ c['cnt'] }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="muted">No company data.</p>
+          {% endif %}
+          <hr>
+          <div style="font-weight:700">Total applications</div>
+          <p class="muted">{{ total_apps }}</p>
+        </div>
+      </aside>
+    </main>
+
+    <div style="margin-top:18px;text-align:center;color:var(--muted)">Built with ❤️ — InternCheck</div>
+  </div>
+</body>
+</html>

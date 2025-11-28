@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Recommend — InternCheck</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body style="max-width:980px;margin:28px auto;padding:18px;">
+  <h2>Recommended internships</h2>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for m in messages %}
+        <div class="flash success" style="margin-bottom:12px;">{{ m }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" style="margin-bottom:16px;">
+    <label style="font-weight:700">Enter skills or paste your resume</label><br>
+    <textarea name="resume_text" rows="6" style="width:100%;padding:8px;margin-top:8px;">{{ input_text or '' }}</textarea>
+    <div style="margin-top:8px;">
+      <button class="btn" type="submit">Get recommendations</button>
+    </div>
+  </form>
+
+  {% if recs %}
+    <div>
+      {% for r in recs %}
+        <div style="border:1px solid #eef2f7;padding:12px;border-radius:8px;margin-bottom:10px;">
+          <div style="font-weight:700">{{ r.title or r[0] if r is iterable }}</div>
+          <div style="color:#6b7280">{{ r.company or r[1] if r is iterable }}</div>
+          <div style="margin-top:6px;">{{ r.description or r[2] if r is iterable }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">No recommendations available. Add skills and press Get recommendations.</p>
+  {% endif %}
+
+  <p><a href="{{ url_for('index') }}">Back to home</a></p>
+</body>
+</html>

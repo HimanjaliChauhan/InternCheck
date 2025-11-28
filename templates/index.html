@@ -1,0 +1,308 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>InternCheck — Internship Verifier</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <a class="brand" href="/">
+        <div class="logo">IC</div>
+        <div>
+          <div style="font-weight:700">InternCheck</div>
+          <small class="muted">Internship Verifier</small>
+        </div>
+      </a>
+
+      <nav>
+        <div class="links">
+          <a href="/">Home</a>
+          <a href="/manage">Manage</a>
+          <a href="/reports">Reports</a>
+          {% if session.get('username') %}
+            <a href="/logout">Logout ({{ session['username'] }})</a>
+          {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+          {% endif %}
+        </div>
+      </nav>
+    </header>
+
+    <main class="container grid">
+      <!-- left: form + results 
+      <section>
+        <div class="card">
+          <div class="h1">Paste internship description</div>
+          <form method="POST" action="/predict">
+            <textarea name="description" rows="8" placeholder="Paste the full internship posting here..." required>{{ description or "" }}</textarea>
+            <div style="margin-top:10px;">
+              <button class="btn" type="submit">Check Authenticity</button>
+            </div>
+            <small class="muted">Pro tip: include the email/phone lines for better detection.</small>
+          </form>
+
+          {% if flag %}
+          <div class="result" style="margin-top:14px;">
+            <div>
+              <div class="flag {{ flag }}">{{ flag }}</div>
+            </div>
+            <div style="flex:1">
+              <div><strong>Reason:</strong> {{ reason or "Not specified" }}</div>
+
+              {% if prob is defined %}
+              <div class="score-wrap">
+                <div style="display:flex;justify-content:space-between;margin-top:8px;">
+                  <small class="muted">Trust score</small>
+                  <small class="muted">{{ prob }}%</small>
+                </div>
+                <div class="score-bar">
+                  <div class="score-fill" style="width: {{ prob }}%"></div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if description %}
+          <hr style="margin-top:16px">
+          <form method="POST" action="/report" onsubmit="return confirm('Submit report for this posting?');">
+            <input type="hidden" name="posting_id" value="{{ posting_id or '' }}">
+            <label><strong>Report this posting</strong></label>
+            <div style="margin-top:8px;">
+              <select name="user_feedback" required>
+                <option value="">-- select --</option>
+                <option value="fake">Fake</option>
+                <option value="genuine">Genuine</option>
+              </select>
+            </div>
+            <div style="margin-top:8px;">
+              <input type="text" name="reason" placeholder="Optional reason">
+            </div>
+            <div style="margin-top:10px;">
+              <button class="btn" type="submit">Send Report</button>
+            </div>
+          </form>
+          {% endif %}
+        </div>
+      </section>
+
+      <!-- right: quick info / help 
+      <aside>
+        <div class="card">
+          <div style="font-weight:700">How to use</div>
+          <p class="muted">Paste the internship posting text and click Check. The tool uses ML + heuristics to assign a trust flag and score.</p>
+          <hr>
+          <div style="font-weight:700">Red flags</div>
+          <ul style="margin-top:6px;color:var(--muted)">
+            <li>Requests registration or training fees</li>
+            <li>Contact only via WhatsApp or personal numbers</li>
+            <li>Vague role description or unrealistic pay</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px;text-align:center">
+          <!--<div style="font-weight:700">Quick Links</div>
+          <p style="margin:8px 0"><a href="/manage">Manage companies</a></p>
+          <p style="margin:8px 0"><a href="/reports">View reports</a></p>
+        </div>
+      </aside>
+    </main>
+
+    <div class="footer-note">Built with ❤️ — InternCheck</div>
+  </div>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>InternCheck — Internship Verifier</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+  <div class="app" style="min-height:100vh;display:flex;flex-direction:column;">
+    <!-- header -->
+    <header class="header" style="padding:18px 28px;border-bottom:1px solid #eee;background:linear-gradient(180deg,#f8fafc,#f1f5f9);">
+      <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
+        <a class="brand" href="/" style="display:flex;align-items:center;text-decoration:none;color:inherit;">
+          <div class="logo" style="width:44px;height:44px;border-radius:10px;background:#536dfe;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;margin-right:10px;">IC</div>
+          <div>
+            <div style="font-weight:700">InternCheck</div>
+            <small class="muted" style="color:#6b7280">Internship Portal</small>
+          </div>
+        </a>
+
+        <nav>
+          <div class="links" style="display:flex;gap:18px;align-items:center;">
+            <a href="/" style="text-decoration:none;color:#334155">Home</a>
+            <a href="{{ url_for('internships') }}" style="text-decoration:none;color:#334155">Browse Internships</a>
+            <a href="{{ url_for('recommend') }}" style="text-decoration:none;color:#334155">Recommend</a>
+            <a href="{{ url_for('reports') }}" style="text-decoration:none;color:#334155">Reports</a>
+            <a href="{{ url_for('manage') }}" style="text-decoration:none;color:#334155">Manage</a>
+            {% if user %}
+              <a href="{{ url_for('logout') }}" style="text-decoration:none;color:#334155">Logout ({{ user.username }})</a>
+            {% else %}
+              <a href="{{ url_for('login') }}" style="text-decoration:none;color:#334155">Login</a>
+              <a href="{{ url_for('register') }}" style="text-decoration:none;color:#334155">Register</a>
+            {% endif %}
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- main content -->
+    <main class="container" style="flex:1; padding:28px 18px;">
+      <div style="max-width:1100px;margin:0 auto; display:grid; grid-template-columns: 1fr 360px; gap:20px;">
+
+        <!-- FLASHED MESSAGES (visible, top) -->
+        <div style="grid-column:1/-1;">
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <div style="margin:8px 0;">
+                {% for m in messages %}
+                  <div style="background:#fff3cd;padding:12px;border-radius:8px;color:#664d03;margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+                    {{ m }}
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endwith %}
+        </div>
+
+        <!-- LEFT: verifier -->
+        <section>
+          <div class="card" style="background:white;padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.04);">
+            <div class="h1" style="font-size:20px;font-weight:700;margin-bottom:12px;">Paste internship description</div>
+
+            <form method="POST" action="{{ url_for('predict') }}">
+              <textarea name="description" rows="10" placeholder="Paste the full internship posting here..." required style="width:100%;padding:12px;border:1px solid #e6e6ef;border-radius:8px;font-size:14px;line-height:1.4;">{{ description or "" }}</textarea>
+              <div style="margin-top:12px;">
+                <button class="btn" type="submit" style="background:#2563eb;color:white;padding:10px 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer;">Check Authenticity</button>
+              </div>
+              <div style="margin-top:8px;"><small class="muted" style="color:#6b7280">Pro tip: include the email/phone lines for better detection.</small></div>
+            </form>
+
+            {% if flag %}
+            <div class="result" style="margin-top:18px; display:flex; gap:14px; align-items:flex-start;">
+              <!-- badge -->
+              <div style="min-width:84px;">
+                {% if flag == 'genuine' %}
+                  <div style="background:#e6ffed;color:#065f46;padding:10px;border-radius:8px;font-weight:700;text-align:center;">Genuine</div>
+                {% elif flag == 'fake' %}
+                  <div style="background:#fff1f2;color:#7f1d1d;padding:10px;border-radius:8px;font-weight:700;text-align:center;">Fake</div>
+                {% else %}
+                  <div style="background:#fff7ed;color:#78350f;padding:10px;border-radius:8px;font-weight:700;text-align:center;">Suspicious</div>
+                {% endif %}
+              </div>
+
+              <!-- details -->
+              <div style="flex:1;">
+                <div style="margin-bottom:8px;"><strong>Reason:</strong> {{ reason or "Analysis result" }}</div>
+
+                <!-- TRUST SCORE: robust block (handles prob or prob_raw) -->
+                {% if prob is defined or prob_raw is defined %}
+                <div style="margin-top:6px;">
+                  {% set p = 0 %}
+                  {% if prob is defined %}
+                    {% set p = prob %}
+                  {% elif prob_raw is defined %}
+                    {% set p = (prob_raw * 100)|round(0, 'floor') %}
+                  {% endif %}
+
+                  <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <small style="color:#374151;font-weight:600;">Trust score</small>
+                    <small style="color:#111;font-weight:700;">{{ p|int }}%</small>
+                  </div>
+
+                  <div style="background:#e6e6e6;border-radius:8px;height:12px;margin-top:8px;overflow:hidden;">
+                    {% if p|int >= 70 %}
+                      {% set col = "#16a34a" %}
+                    {% elif p|int <= 40 %}
+                      {% set col = "#dc2626" %}
+                    {% else %}
+                      {% set col = "#f59e0b" %}
+                    {% endif %}
+                    <div style="width:{{ p|int }}%;height:12px;border-radius:8px;background:{{ col }};transition:width .3s ease;"></div>
+                  </div>
+                </div>
+                {% endif %}
+
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- report form -->
+            {% if description %}
+              <hr style="margin:18px 0;border:none;border-top:1px solid #eef2f7;">
+              <form method="POST" action="{{ url_for('report') }}" onsubmit="return confirm('Submit report for this posting?');">
+                <input type="hidden" name="posting_id" value="{{ posting_id or '' }}">
+                <label style="font-weight:700;">Report this posting</label>
+                <div style="margin-top:8px;">
+                  <select name="user_feedback" required style="width:100%;padding:8px;border-radius:8px;border:1px solid #e6e6ef;">
+                    <option value="">-- select --</option>
+                    <option value="fake">Fake</option>
+                    <option value="genuine">Genuine</option>
+                  </select>
+                </div>
+                <div style="margin-top:8px;">
+                  <input type="text" name="reason" placeholder="Optional reason" style="width:100%;padding:8px;border-radius:8px;border:1px solid #e6e6ef;">
+                </div>
+                <div style="margin-top:10px;">
+                  <button class="btn" type="submit" style="background:#ef4444;color:white;padding:9px 12px;border-radius:8px;border:none;font-weight:700;cursor:pointer;">Send Report</button>
+                </div>
+              </form>
+            {% endif %}
+
+          </div>
+        </section>
+
+        <!-- RIGHT: info + recent internships -->
+        <aside>
+          <div class="card" style="background:white;padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.04);">
+            <div style="font-weight:700;margin-bottom:8px;">How to use</div>
+            <p style="color:#6b7280;margin:0 0 12px 0">Paste the internship posting text and click Check. The tool uses ML + heuristics to assign a trust flag and score.</p>
+            <hr style="border:none;border-top:1px solid #eef2f7;margin:10px 0;">
+            <div style="font-weight:700;margin-bottom:6px;">Red flags</div>
+            <ul style="margin-top:6px;color:#6b7280;padding-left:18px;">
+              <li>Requests registration or training fees</li>
+              <li>Contact only via WhatsApp or personal numbers</li>
+              <li>Vague role description or unrealistic pay</li>
+            </ul>
+          </div>
+
+          <div class="card" style="background:white;padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.04);margin-top:14px;">
+            <div style="font-weight:700;">Recent internships</div>
+            <div style="margin-top:8px;">
+              {% if recent %}
+                {% for i in recent %}
+                  <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed #eef2f7;">
+                    <div style="font-weight:600;">{{ i['title'] }}</div>
+                    <div style="color:#6b7280;font-size:13px;">{{ i['company_name'] or 'Company' }} — {{ i['location'] or 'Remote' }}</div>
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p style="color:#6b7280;margin:6px 0;">No recent internships.</p>
+              {% endif %}
+            </div>
+
+            <div style="margin-top:12px;text-align:center;">
+              <a class="btn" href="{{ url_for('internships') }}" style="display:inline-block;padding:8px 12px;border-radius:8px;background:#2563eb;color:white;text-decoration:none;font-weight:700;">Browse all</a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </main>
+
+    <!-- footer -->
+    <footer style="padding:18px 0;text-align:center;color:#6b7280;border-top:1px solid #f1f5f9;">
+      <div style="max-width:1100px;margin:0 auto;">Built with ❤️ — InternCheck</div>
+    </footer>
+  </div>
+</body>
+</html>

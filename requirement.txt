@@ -1,0 +1,65 @@
+Flask==2.2.5
+scikit-learn==1.7.1
+numpy>=1.24
+pandas>=2.0
+
+Genuine Intern 1 — Web Development Intern (No money nonsense)
+
+Company: CodeWave Technologies
+Location: Pune (Hybrid)
+Stipend: ₹8,000–₹10,000/month
+Duration: 3 months
+Description:
+We’re looking for a Web Development Intern to assist in building responsive UI components for client projects. You’ll work with HTML, CSS, React, and REST API integrations under guidance of senior developers.
+Requirements: Basic React knowledge, Git, JavaScript fundamentals.
+Perks: Certificate + PPO based on performance.
+Hiring Process: Google form → Screening → Technical round → Final HR round.
+Contact: careers@codewave.in
+
+Genuine Intern 2 — Data Analyst Intern
+
+Company: BrightMetrics Solutions
+Location: Bengaluru (On-site)
+Stipend: ₹12,000/month
+Duration: 6 months
+Description:
+Analyze datasets, prepare weekly dashboards, automate reports, and collaborate with business teams.
+Requirements: Python, Excel, and knowledge of data cleaning techniques.
+Perks: Letter of Recommendation + mentorship.
+Contact: apply@brightmetrics.co
+
+2) SUSPICIOUS INTERNSHIP DESCRIPTIONS
+Suspicious Intern 1 — HR Assistant (Weird vibes, but not openly scammy)
+
+Company: HR Hub India
+Location: Remote
+Stipend: ₹2,000 (performance based)
+Duration: 1 month
+Description:
+We need interns to “manage company operations and confidential data”. Very limited details available about our clients.
+Requirements: Able to work 6 hours daily.
+Extra Notes: WhatsApp-based tasks only. No formal email communication.
+Contact: +91 88XXXXXXXX (WhatsApp only)
+
+Suspicious Intern 2 — Digital Marketing Intern
+
+Company: GrowthGenius Media
+Location: Remote
+Stipend: Not mentioned
+Duration: 2 months
+Description:
+Your tasks include promoting clients on social media. Training will be provided but training materials cost ₹499 (non-refundable).
+Requirements: Basic knowledge of Instagram.
+Contact: dm us @growthgenius_official on Instagram.
+
+(Red flag flavor: training fee, unspecified stipend, only Instagram contact)
+
+Suspicious Intern 3 — Content Writer
+
+Company: GlobalEd Insights
+Location: Remote
+Stipend: “Depends on the number of articles approved”
+Duration: Not mentioned at all
+Description:
+Write educational content. No samples required. Daily submission required.
+Contact: Fill the form: bit.ly/GEI-job344 (shortened unknown link)

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin — Reports</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app" style="max-width:980px;margin:20px auto;">
+    <header class="header">
+      <a class="brand" href="{{ url_for('index') }}"><div class="logo">IC</div><div><div style="font-weight:700">InternCheck</div><small class="muted">Admin Reports</small></div></a>
+      <nav><div class="links"><a href="{{ url_for('manage') }}">Manage</a><a href="{{ url_for('logout') }}">Logout</a></div></nav>
+    </header>
+
+    <main class="container">
+      <h2>Reports (latest first)</h2>
+      {% if reports %}
+        <table class="table">
+          <thead><tr><th>ID</th><th>Posting</th><th>Feedback</th><th>Reason</th><th>Reporter</th><th>Created At</th></tr></thead>
+          <tbody>
+            {% for r in reports %}
+            <tr>
+              <td>{{ r.id }}</td>
+              <td>{{ r.internship_title or r.posting_id }}</td>
+              <td>{{ r.feedback or r.user_feedback }}</td>
+              <td>{{ r.reason }}</td>
+              <td>{{ r.reporter_username or 'Anon' }}</td>
+              <td>{{ r.created_at }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="muted">No reports found.</p>
+      {% endif %}
+    </main>
+  </div>
+</body>
+</html>

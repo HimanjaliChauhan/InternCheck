@@ -1,0 +1,91 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Faculty Registration</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        form { margin-top: 20px; }
+        input { padding: 8px; margin: 5px; width: 250px; }
+        button { padding: 8px; margin: 10px 0; }
+        .flash {
+            padding: 10px;
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            margin-bottom: 20px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Faculty Registration</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label for="username">Username:</label><br>
+        <input type="text" name="username" required><br><br>
+
+        <label for="password">Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <!-- Access code to prevent students from registering 
+        <label for="access_code">Faculty Access Code:</label><br>
+        <input type="text" name="access_code" required><br><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <p><a href="/login">Already have an account? Login here</a></p>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Register — InternCheck</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div style="max-width:520px;margin:40px auto;">
+    <h2>Register</h2>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for m in messages %}
+          <div style="background:#fff3cd;padding:8px;border-radius:6px;margin-bottom:8px;">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <form method="POST">
+      <label>Username</label><br>
+      <input type="text" name="username" required style="width:100%;padding:8px;margin-bottom:8px;">
+      <label>Password</label><br>
+      <input type="password" name="password" required style="width:100%;padding:8px;margin-bottom:8px;">
+      <label>Role</label><br>
+      <select name="role" style="width:100%;padding:8px;margin-bottom:8px;">
+        <option value="student">Student</option>
+        <option value="company">Company</option>
+        <option value="admin">Admin</option>
+      </select>
+      <label>Full name (optional)</label><br>
+      <input type="text" name="full_name" style="width:100%;padding:8px;margin-bottom:8px;">
+      <label>Email (optional)</label><br>
+      <input type="email" name="email" style="width:100%;padding:8px;margin-bottom:8px;">
+      <div style="margin-top:10px;">
+        <button type="submit" style="padding:8px 12px;background:#2563eb;color:white;border:none;border-radius:6px;">Create account</button>
+        <a href="{{ url_for('login') }}" style="margin-left:12px;color:#6b7280;">Back to login</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
