@@ -25,6 +25,15 @@ InternCheck/
 ├── db/                     # sqlite DB files (not required in repo)
 └── screenshots/          
 
+#Future Enhancements
+- ML Model: scikit-learn Naive Bayes (Python 3.11 upgrade)
+- Database: SQLite/PostgreSQL for user reports
+- User Accounts: Save analysis history
+- Dashboard: Analytics + trends
+-API: REST endpoints for integrations
+- Alerts: Email notifications for new scams
+- Multi-language: Hindi + regional support
+
 #Quick start (run locally)
 Clone:
 git clone https://github.com/HimanjaliChauhan/InternCheck.git
@@ -71,8 +80,20 @@ The app uses an app secret key for sessions. Set it as an environment variable i
 export FLASK_SECRET="your-strong-secret" (Windows PowerShell: $env:FLASK_SECRET="your-strong-secret")
 
 Deployment
-This repo can be deployed to hosting providers that support Python/Flask (Render, Railway, Fly.io, or a VPS).
+This project is deployed on render.
 
-License
+MIT License - Free to use
+
+Live Demo Link:
+https://interncheck.onrender.com
+
+
+
+
+
+Built by Himanjali Chauhan | Final Year CS Student  
+LinkedIn- https://www.linkedin.com/in/himanjali-chauhan-0a7aa9295/ 
+
+
 
 
