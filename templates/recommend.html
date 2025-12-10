@@ -1,43 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Recommend — InternCheck</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>InternCheck | Recommend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body style="max-width:980px;margin:28px auto;padding:18px;">
-  <h2>Recommended internships</h2>
+<body>
+<div class="app">
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {% for m in messages %}
-        <div class="flash success" style="margin-bottom:12px;">{{ m }}</div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
+    <!-- Header / nav, same style as index page -->
+    <header class="header">
+        <a href="{{ url_for('index') }}" class="brand">
+            <div class="logo">IC</div>
+            <div>
+                <div class="h1">InternCheck</div>
+                <small class="muted">Detect and avoid fake internships</small>
+            </div>
+        </a>
 
-  <form method="POST" style="margin-bottom:16px;">
-    <label style="font-weight:700">Enter skills or paste your resume</label><br>
-    <textarea name="resume_text" rows="6" style="width:100%;padding:8px;margin-top:8px;">{{ input_text or '' }}</textarea>
-    <div style="margin-top:8px;">
-      <button class="btn" type="submit">Get recommendations</button>
-    </div>
-  </form>
+        <nav>
+            <div class="links">
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('internships') }}">Internships</a>
+                <a href="{{ url_for('post_internship') }}">Post Internship</a>
+                <a href="{{ url_for('recommend') }}">Recommend</a>
+                <a href="{{ url_for('reports') }}">Reports</a>
+                {% if user %}
+                    <a href="{{ url_for('manage') }}">Manage</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
 
-  {% if recs %}
-    <div>
-      {% for r in recs %}
-        <div style="border:1px solid #eef2f7;padding:12px;border-radius:8px;margin-bottom:10px;">
-          <div style="font-weight:700">{{ r.title or r[0] if r is iterable }}</div>
-          <div style="color:#6b7280">{{ r.company or r[1] if r is iterable }}</div>
-          <div style="margin-top:6px;">{{ r.description or r[2] if r is iterable }}</div>
+    <!-- Main content box -->
+    <main class="container">
+
+        <div class="h1">Internship Recommendations</div>
+        <p class="muted">Paste your skills or resume text to get personalized internship suggestions.</p>
+
+        <!-- Two-column layout: form + results -->
+        <div class="grid">
+            <!-- Input form card -->
+            <section class="card">
+                <div class="h1">Enter Your Skills</div>
+                <form method="post">
+                    <label for="resume_text">Skills / Resume text</label>
+                    <textarea 
+                        id="resume_text" 
+                        name="resume_text" 
+                        rows="8"
+                        placeholder="e.g. Python, Flask, data analysis, machine learning, web development">{{ input_text or '' }}</textarea>
+                    <br><br>
+                    <button type="submit" class="btn">Get Recommendations</button>
+                </form>
+            </section>
+
+            <!-- Results card -->
+            <section class="card">
+                <div class="h1">Suggested Internships</div>
+                {% if recs %}
+                    {% if recs|length > 0 %}
+                        <ul style="list-style:none; padding:0; margin:0;">
+                            {% for item in recs %}
+                                <li style="padding:12px 0; border-bottom:1px solid #f1f5f9;">
+                                    {% if item is mapping %}
+                                        <div style="font-weight:600; margin-bottom:4px;">{{ item.get('title', 'Internship') }}</div>
+                                        {% if item.get('company') %}
+                                            <small class="muted">{{ item.company }}</small>
+                                        {% endif %}
+                                    {% else %}
+                                        <div>{{ item }}</div>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="muted">No matching internships found.</p>
+                    {% endif %}
+                {% else %}
+                    <p class="muted">Enter your skills above and click "Get Recommendations" to see suggestions.</p>
+                {% endif %}
+            </section>
         </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <p class="muted">No recommendations available. Add skills and press Get recommendations.</p>
-  {% endif %}
 
-  <p><a href="{{ url_for('index') }}">Back to home</a></p>
+        <!-- Back button -->
+        <div style="margin-top:20px;">
+            <form action="{{ url_for('index') }}" method="get">
+                <button type="submit" class="btn">Back to Home</button>
+            </form>
+        </div>
+
+    </main>
+
+    <p class="footer-note">© InternCheck</p>
+</div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>InternCheck | Recommend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="page">
+<header class="navbar">
+    <div class="nav-left">
+        <a href="{{ url_for('index') }}" class="logo">InternCheck</a>
+    </div>
+    <nav class="nav-links">
+        <a href="{{ url_for('internships') }}">Internships</a>
+        <a href="{{ url_for('post_internship') }}">Post Internship</a>
+        <a href="{{ url_for('recommend') }}" class="active">Recommend</a>
+        <a href="{{ url_for('reports') }}">Reports</a>
+        {% if user %}
+            <a href="{{ url_for('manage') }}">Manage</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main class="container">
+    <section class="section-header">
+        <h1>Internship Recommendations</h1>
+        <p>Paste your skills or resume text to get suggested internships.</p>
+    </section>
+
+    <section class="card">
+        <form method="post" class="form-vertical">
+            <label for="resume_text">Your skills / resume text</label>
+            <textarea id="resume_text" name="resume_text"
+                      rows="8"
+                      placeholder="e.g. Python, Flask, data analysis, machine learning">{{ input_text or '' }}</textarea>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Get Recommendations</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Home</a>
+            </div>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Suggested Internships</h2>
+        {% if recs %}
+            <ul class="simple-list">
+                {% for item in recs %}
+                    {# item can be string or dict depending on your recommender #}
+                    {% if item is mapping %}
+                        <li>
+                            <strong>{{ item.get("title", "Internship") }}</strong>
+                            {% if item.get("company") %}
+                                <span class="badge">{{ item["company"] }}</span>
+                            {% endif %}
+                            {% if item.get("link") %}
+                                <a href="{{ item["link"] }}" target="_blank">View</a>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li>{{ item }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No recommendations yet. Enter your skills above and click “Get Recommendations”.</p>
+        {% endif %}
+    </section>
+</main>
+</body>
+</html> -->

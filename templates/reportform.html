@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Fake Internship</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="navbar">
+    <h1 class="logo">InternCheck</h1>
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('internships') }}">Genuine Internships</a>
+        <a href="{{ url_for('post_internship') }}">Post Internship</a>
+        <a class="active" href="{{ url_for('report') }}">Report Fake</a>
+        <a href="{{ url_for('reports') }}">Reports</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h2>Report a Suspicious Internship</h2>
+    <form method="post">
+        <label>Company name*</label>
+        <input type="text" name="company" required>
+
+        <label>Internship title*</label>
+        <input type="text" name="title" required>
+
+        <label>Description / Job post text*</label>
+        <textarea name="description" rows="6" required></textarea>
+
+        <label>Your email (optional)</label>
+        <input type="email" name="email">
+
+        <button type="submit">Submit report</button>
+    </form>
+</main>
+</body>
+</html>

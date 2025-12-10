@@ -255,6 +255,81 @@ def register():
     return render_template("register.html")
 
 
+@app.route("/reports")
+def reports():
+    # Internship / application statistics for dashboard-style reports page
+
+    # Top skills
+    rows = query_all(
+        "SELECT skills_required FROM internships "
+        "WHERE skills_required IS NOT NULL AND trim(skills_required) != ''"
+    )
+    skills = {}
+    for r in rows:
+        txt = r["skills_required"] or ""
+        for s in re.split(r"[,\n;]+", txt):
+            s = s.strip().lower()
+            if not s:
+                continue
+            skills[s] = skills.get(s, 0) + 1
+    top_skills = sorted(skills.items(), key=lambda x: -x[1])[:10]
+
+    # Top companies by number of internships
+    top_companies = query_all(
+        "SELECT u.full_name, COUNT(i.id) AS cnt "
+        "FROM internships i "
+        "LEFT JOIN users u ON i.company_id = u.id "
+        "GROUP BY i.company_id "
+        "ORDER BY cnt DESC LIMIT 10"
+    )
+
+    # Total number of applications
+    total_apps_row = query_one("SELECT COUNT(*) AS cnt FROM applications")
+    total_apps = total_apps_row["cnt"] if total_apps_row else 0
+
+    return render_template(
+        "reports.html",
+        top_skills=top_skills,
+        top_companies=top_companies,
+        total_apps=total_apps,
+    )
+
+
+@app.route("/recommend", methods=["GET", "POST"])
+def recommend():
+    user = get_current_user()
+    input_text = ""
+    recs = []
+
+    # GET default: pre‑fill with user skills if present
+    if request.method == "GET":
+        if user and user.get("skills"):
+            input_text = user.get("skills", "")
+    else:
+        # POST: user submitted text from form
+        input_text = request.form.get("resume_text", "").strip()
+
+    try:
+        if recommend_for_text and input_text:
+            # your existing recommender function from model/recommender.py
+            recs = recommend_for_text(input_text, topn=7)
+        else:
+            recs = []
+    except Exception:
+        traceback.print_exc()
+        recs = []
+
+    return render_template(
+        "recommend.html",
+        recs=recs,
+        input_text=input_text,
+    )
+
+
+
+
+
+
 
 @app.route("/report", methods=["POST"])
 def report():
@@ -425,42 +500,43 @@ def predict():
 
 
 
-@app.route("/reports")
-def reports():
-    rows = query_all("SELECT skills_required FROM internships WHERE skills_required IS NOT NULL AND trim(skills_required) != ''")
-    skills = {}
-    for r in rows:
-        txt = r["skills_required"] or ""
-        for s in re.split(r"[,\n;]+", txt):
-            s = s.strip().lower()
-            if not s:
-                continue
-            skills[s] = skills.get(s, 0) + 1
-    top_skills = sorted(skills.items(), key=lambda x: -x[1])[:10]
-    top_companies = query_all("SELECT u.full_name, COUNT(i.id) as cnt FROM internships i LEFT JOIN users u ON i.company_id = u.id GROUP BY i.company_id ORDER BY cnt DESC LIMIT 10")
-    total_apps_row = query_one("SELECT COUNT(*) as cnt FROM applications")
-    total_apps = total_apps_row["cnt"] if total_apps_row else 0
-    return render_template("reports.html", top_skills=top_skills, top_companies=top_companies, total_apps=total_apps)
+# @app.route("/reports")
+# def reports():
+#     reports = Reports.query.all() 
+#     rows = query_all("SELECT skills_required FROM internships WHERE skills_required IS NOT NULL AND trim(skills_required) != ''")
+#     skills = {}
+#     for r in rows:
+#         txt = r["skills_required"] or ""
+#         for s in re.split(r"[,\n;]+", txt):
+#             s = s.strip().lower()
+#             if not s:
+#                 continue
+#             skills[s] = skills.get(s, 0) + 1
+#     top_skills = sorted(skills.items(), key=lambda x: -x[1])[:10]
+#     top_companies = query_all("SELECT u.full_name, COUNT(i.id) as cnt FROM internships i LEFT JOIN users u ON i.company_id = u.id GROUP BY i.company_id ORDER BY cnt DESC LIMIT 10")
+#     total_apps_row = query_one("SELECT COUNT(*) as cnt FROM applications")
+#     total_apps = total_apps_row["cnt"] if total_apps_row else 0
+#     return render_template("reports.html", top_skills=top_skills, top_companies=top_companies, total_apps=total_apps)
 
-@app.route("/recommend", methods=["GET","POST"])
-def recommend():
-    user = get_current_user()
-    input_text = ""
-    recs = []
-    if request.method == "POST":
-        input_text = request.form.get("resume_text","").strip()
-    else:
-        if user and user.get("skills"):
-            input_text = user.get("skills","")
-    try:
-        if recommend_for_text and input_text:
-            recs = recommend_for_text(input_text, topn=7)
-        else:
-            recs = []
-    except Exception:
-        traceback.print_exc()
-        recs = []
-    return render_template("recommend.html", recs=recs, input_text=input_text)
+# @app.route("/recommend", methods=["GET","POST"])
+# def recommend():
+#     user = get_current_user()
+#     input_text = ""
+#     recs = []
+#     if request.method == "POST":
+#         input_text = request.form.get("resume_text","").strip()
+#     else:
+#         if user and user.get("skills"):
+#             input_text = user.get("skills","")
+#     try:
+#         if recommend_for_text and input_text:
+#             recs = recommend_for_text(input_text, topn=7)
+#         else:
+#             recs = []
+#     except Exception:
+#         traceback.print_exc()
+#         recs = []
+#     return render_template("recommend.html", recs=recs, input_text=input_text)
 
 @app.route("/admin/reports")
 def admin_reports():
@@ -499,3 +575,116 @@ if __name__ == "__main__":
         conn = sqlite3.connect(DB_PATH)
         conn.close()
     app.run(debug=True, host="127.0.0.1", port=5000)
+
+
+
+
+
+
+
+# from flask import Flask, render_template, request, redirect, url_for, flash
+# from flask_sqlalchemy import SQLAlchemy
+# from datetime import datetime
+# import os
+
+# app = Flask(__name__)
+# app.config['SECRET_KEY'] = 'change-this-secret-key'
+
+# # ---- DATABASE CONFIG ----
+# basedir = os.path.abspath(os.path.dirname(__file__))
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'interncheck.db')
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# db = SQLAlchemy(app)
+
+
+# # ---- DATABASE MODELS ----
+# class Report(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     company = db.Column(db.String(200), nullable=False)
+#     title = db.Column(db.String(200), nullable=False)
+#     description = db.Column(db.Text, nullable=False)
+#     reporter_email = db.Column(db.String(200))
+#     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+#     score = db.Column(db.Float)           # optional: ML score
+#     is_fake = db.Column(db.Boolean)       # optional: label
+
+#     def __repr__(self):
+#         return f'<Report {self.id} - {self.company}>'
+
+
+# # ---- ROUTES ----
+
+# @app.route('/')
+# def home():
+#     return render_template('index.html')
+
+
+# @app.route('/report', methods=['GET', 'POST'])
+# def report():
+#     """Page where user submits a fake internship report."""
+#     if request.method == 'POST':
+#         company = request.form.get('company', '').strip()
+#         title = request.form.get('title', '').strip()
+#         description = request.form.get('description', '').strip()
+#         reporter_email = request.form.get('email', '').strip()
+
+#         if not company or not title or not description:
+#             flash('Please fill all required fields.', 'danger')
+#             return redirect(url_for('report'))
+
+#         new_report = Report(
+#             company=company,
+#             title=title,
+#             description=description,
+#             reporter_email=reporter_email or None
+#         )
+
+#         # TODO: call your ML model here to predict score / fake / genuine
+#         # new_report.score = predicted_score
+#         # new_report.is_fake = is_fake_bool
+
+#         db.session.add(new_report)
+#         db.session.commit()
+#         flash('Thank you! Your report has been submitted.', 'success')
+#         return redirect(url_for('reports'))
+
+#     return render_template('report.html')
+
+
+# @app.route('/reports')
+# def reports():
+#     """
+#     Show all reports that are stored in the database.
+#     This was the part causing trouble: make sure we query
+#     and pass `reports` into the template.
+#     """
+#     all_reports = Report.query.order_by(Report.created_at.desc()).all()
+#     return render_template('reports.html', reports=all_reports)
+
+
+# @app.route('/internships')
+# def internships():
+#     """Dummy page – you can later fetch real internships here."""
+#     return render_template('internships.html')
+
+# @app.route('/recommend')
+# def recommend():
+#     # Later you will put your ML prediction logic here
+#     return render_template('recommend.html')
+
+
+# @app.route('/post-internship', methods=['GET', 'POST'])
+# def post_internship():
+#     """Company can post internships – implement DB model later."""
+#     if request.method == 'POST':
+#         flash('Internship posting feature coming soon.', 'info')
+#         return redirect(url_for('post_internship'))
+#     return render_template('post_internship.html')
+
+
+# # ---- MAIN ----
+# if __name__ == '__main__':
+#     with app.app_context():
+#         db.create_all()
+#     app.run(debug=True)
