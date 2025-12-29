@@ -1,99 +1,111 @@
-#InternCheck
-AI-powered internship scam detector and recommendation web app built with Flask, SQLite and simple ML/NLP heuristics.
+InternCheck – AI-Powered Internship Scam Detector
+InternCheck is a full-stack web application that detects fake internship postings using ML heuristics and rule-based analysis, enables scam reporting, supports company postings/student applications, and provides skill-based recommendations. Built to protect students from common internship scams in India.
 
-#Summary
-InternCheck analyses internship postings and resume/skill text to detect suspicious or fake internship listings, lets users report
-suspicious postings,supports company posting and student applications, and provides simple recommendations based on skills.
+Live Demo: https://interncheck.onrender.com
+GitHub: github.com/HimanjaliChauhan/InternCheck
+------------------------------------------------------------
+Key Features
 
-#Features
-Detects suspicious internship postings using ML (if model present) and heuristics.
-Report suspicious postings and store reports in the database.
-Company users can post internships; students can apply and view applications.
-Basic recommendation feature (uses optional recommender module if available).
-Admin view for reported postings.
+-Scam Detection: ML (Naive Bayes optional) + heuristics analyze stipend, fees, contact methods, job descriptions
+-User Reporting: Students report suspicious postings (stored in SQLite)
+-Company Portal: Post internships, manage applications
+-Skill Recommendations: Match resume/skills to legitimate opportunities
+-Admin Dashboard: View reported scams and platform stats
+-Production Ready: Render deployment with session management
+-------------------------------------------------------------------
+Project Architecture
 
-#Tech stack
-Flask - Jinja2 - SQLite - Python - scikit-learn (optional) - HTML/CSS
-
-#Project structure
 InternCheck/
+│
 ├── app.py                  # Main Flask application
-├── requirements.txt        # Python dependencies
+├── requirements.txt        # Dependencies
 ├── templates/              # Jinja2 HTML templates
 ├── static/                 # CSS, JS, images
-├── model/                  # optional ML model & vectorizer pickles
-├── db/                     # sqlite DB files (not required in repo)
-└── screenshots/          
+├── model/                  # ML files (vectorizer.pkl, internship_model.pkl)
+├── db/                     # SQLite database
+└── screenshots/
+----------------------------------------------------------------------
+Tech Stack
 
-#Future Enhancements
-- ML Model: scikit-learn Naive Bayes (Python 3.11 upgrade)
-- Database: SQLite/PostgreSQL for user reports
-- User Accounts: Save analysis history
-- Dashboard: Analytics + trends
--API: REST endpoints for integrations
-- Alerts: Email notifications for new scams
-- Multi-language: Hindi + regional support
+-Category:	Technologies
+-Backend:	Python, Flask, Jinja2
+-Database:	SQLite
+-ML/Heuristics:	scikit-learn (optional)
+-Frontend	:HTML, CSS
+-Deployment	:Render
+-Version Control: Git, GitHub
 
-#Quick start (run locally)
-Clone:
-git clone https://github.com/HimanjaliChauhan/InternCheck.git
-
-Enter project:
-cd InternCheck
-
-Create and activate venv:
-
-Windows:
+-Dataset & Analysis
+Analyzes these scam indicators:
+Unrealistic stipends (₹0-₹5K red flags)
+Training fees demands
+Suspicious contact methods (WhatsApp only)
+Vague job descriptions
+Missing company details
+ML Fallback: Uses heuristics if model files absent
+----------------------------------------------------------------
+How to Run Locally
+Clone repository-   git clone https://github.com/HimanjaliChauhan/InternCheck.git
+                    cd InternCheck
+                    Create virtual environment
+# Windows
 python -m venv venv
 venv\Scripts\activate
 
-macOS / Linux:
+# Linux/Mac
 python -m venv venv
 source venv/bin/activate
 
-Install dependencies:
+-Install dependencies
 pip install -r requirements.txt
+-Set environment variable
+export FLASK_SECRET="your-strong-secret-key"
 
-Start app:
-python app.py
+Run application-  python app.py
+Open: http://127.0.0.1:5000
+-------------------------------------------------------------------
+How InternCheck Is Different
 
-Open in browser:
-http://127.0.0.1:5000
+Unlike basic scam checkers, InternCheck provides:
+-Hybrid Detection: ML + rules (works without model files)
+-Full Platform: Reporting, company postings, applications, recommendations
+-Production Architecture: SQLite, sessions, admin dashboard
+-Student-First: Real-time trust scores + prevention tips
+-Scalable: Render deployment with proper secret management
+--------------------------------------------------------------------------
 
-#Notes about dependencies
-If requirements.txt is missing, create it locally with:
-pip freeze > requirements.txt
+Dashboard Modules
 
-Model files (if included) live in model/ as:
-vectorizer.pkl
-internship_model.pkl
-If absent, the app will fall back to heuristics.
+-Home/Analysis – Paste internship text → Get trust score
+-Recommendations – Paste skills → Get matched opportunities
+-Reports – View platform scam statistics
+-Company Portal – Post internships, view applications
+-Admin Dashboard – Manage reported postings
+-----------------------------------------------------------------------------
+Use Cases
 
-#How to use the app
-Home page: paste internship description and click Check/Analyze to get a prediction and trust score.
-Recommend: paste your skills/resume text and click Get Recommendations.
-Reports: view platform stats; Admin → /admin/reports shows reported postings.
-Manage: login as company/admin to post internships and manage applications.
-
-#Environment 
-The app uses an app secret key for sessions. Set it as an environment variable in production:
-export FLASK_SECRET="your-strong-secret" (Windows PowerShell: $env:FLASK_SECRET="your-strong-secret")
-
-Deployment
-This project is deployed on render.
-
-MIT License - Free to use
-
-Live Demo Link:
-https://interncheck.onrender.com
-
-
-
-
-
-Built by Himanjali Chauhan | Final Year CS Student  
-LinkedIn- https://www.linkedin.com/in/himanjali-chauhan-0a7aa9295/ 
-
-
-
+-Student internship verification
+-Campus placement cell integration
+-Company legitimacy screening
+-Data analytics/ML portfolio project
+------------------------------------------------------------
+Limitations
+-ML model optional (falls back to heuristics)
+-No user accounts (session-based)
+-SQLite (not PostgreSQL for production scale)
+-------------------------------------------------------------
+Future Enhancements
+-Naive Bayes ML model training
+-User authentication & history
+-REST API endpoints
+-Email scam alerts
+-Multi-language support (Hindi)
+-Analytics dashboard
+--------------------------------------------------------------
+Author
+Himanjali Chauhan
+Final Year BSc Computer Science | Data Analytics & AI Enthusiast
+-----------------------------------------------------------------
+⭐ Star this repository if you find it useful!
+📄 MIT License – Free to use and modify
 
